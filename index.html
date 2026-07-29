@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دەستکاریکردنی ڤیدیۆی ڕۆناڵدۆ + نەسیحەت</title>
+  <title>دەستکاریکردنی ڤیدیۆی ڕۆناڵدۆ بە دەنگی خۆی</title>
   <style>
     * {
       box-sizing: border-box;
@@ -148,22 +148,28 @@
 <body>
 
   <div class="container">
-    <h1>دەستکاریکردنی ڤیدیۆی ڕۆناڵدۆ</h1>
+    <h1>دەستکاریکردنی ڤیدیۆ بە دەنگی ڕۆناڵدۆ</h1>
 
+    <!-- فەراخی یەکەم: ڤیدیۆ + فایلی دەنگی ڕۆناڵدۆ -->
     <div class="section">
-      <h3>فەراخی ١: ڤیدیۆکەی ڕۆناڵدۆ هەڵبژێرە</h3>
+      <h3>فەراخی ١: ڤیدیۆکەی ڕۆناڵدۆ بێنە</h3>
       <input type="file" id="videoInput" accept="video/*">
+      
+      <h3 style="margin-top: 15px;">بارکردنی دەنگی ڕۆناڵدۆ (MP3):</h3>
+      <input type="file" id="audioInput" accept="audio/*">
     </div>
 
+    <!-- فەراخی دووەم: ئامۆژگاری ئینگلیزی -->
     <div class="section">
-      <h3>فەراخی ٢: Football Advice (نەسیحەتی تۆپی پێ)</h3>
+      <h3>فەراخی ٢: Football Advice</h3>
       <div class="advice-box">
-        <p id="adviceText">"Talent without working hard is nothing. You have to sacrifice everything to reach your goals and be the best version of yourself on the pitch."</p>
+        <p>"Your love makes me strong, your hate makes me unstoppable. Work hard every day and keep your dreams alive."</p>
       </div>
     </div>
 
+    <!-- فەراخی سێیەم: دیزاینی ڤیدیۆ -->
     <div class="section">
-      <h3>فەراخی ٣: دیزاینی ڤیدیۆ هەڵبژێرە</h3>
+      <h3>فەراخی ٣: دیزاینی ڤیدیۆ</h3>
       <div class="filter-options">
         <button class="btn-filter" onclick="applyFilter('dark', this)">تاریککردن</button>
         <button class="btn-filter" onclick="applyFilter('bright', this)">ڕوونکردنەوە</button>
@@ -171,24 +177,28 @@
       </div>
     </div>
 
+    <!-- پێشاندان -->
     <div class="section" id="previewSection" style="display: none;">
       <h3>پێشاندان:</h3>
       <div class="video-container">
+        <!-- ڤیدیۆکە Mute کراوە بۆ ئەوەی دەنگی ڕەسەنی نەیێت -->
         <video id="ronaldoVideo" muted playsinline></video>
       </div>
       
-      <button class="btn-action btn-play" onclick="playMutedVideoWithAdvice()">▶️ لێدانی ڤیدیۆ بە دەنگی نەسیحەتەکەوە</button>
-      <button class="btn-action btn-download" onclick="downloadVideo()">📥 داگرتنی یەکسەر (Download Video)</button>
+      <button class="btn-action btn-play" onclick="playVideoWithRonaldoVoice()">▶️ لێدانی ڤیدیۆ بە دەنگی ڕاستەقینەی ڕۆناڵدۆ</button>
+      <button class="btn-action btn-download" onclick="downloadVideo()">📥 داگرتنی یەکسەر (Download)</button>
     </div>
   </div>
 
   <script>
     const videoInput = document.getElementById('videoInput');
+    const audioInput = document.getElementById('audioInput');
     const ronaldoVideo = document.getElementById('ronaldoVideo');
     const previewSection = document.getElementById('previewSection');
-    const adviceText = document.getElementById('adviceText').innerText;
 
     let videoFileUrl = '';
+    // دەتوانیت ناو یان لینکێکی ئامادەکراوی MP3ی دەنگی ڕۆناڵدۆ لێرە دابنێیت
+    let ronaldoAudio = new Audio('ronaldo-voice.mp3'); 
 
     // بارکردنی فایلی ڤیدیۆ
     videoInput.addEventListener('change', function(e) {
@@ -196,12 +206,21 @@
       if (file) {
         videoFileUrl = URL.createObjectURL(file);
         ronaldoVideo.src = videoFileUrl;
-        ronaldoVideo.muted = true; // دەنگی ڕەسەنی میوت دەکرێت
+        ronaldoVideo.muted = true; // دەنگی ناو ڤیدیۆکە میوت دەکرێت
         previewSection.style.display = 'block';
       }
     });
 
-    // گۆڕینی دیزاین و فلتەرەکان
+    // بارکردنی فایلی دەنگی تایبەت بە ڕۆناڵدۆ (ئەگەر لە ئامێرەکەت هەتبێت)
+    audioInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const audioUrl = URL.createObjectURL(file);
+        ronaldoAudio = new Audio(audioUrl);
+      }
+    });
+
+    // گۆڕینی دیزاین
     function applyFilter(filterType, btn) {
       document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -212,41 +231,29 @@
       if (filterType === '4k') ronaldoVideo.classList.add('filter-4k');
     }
 
-    // لێدانی ڤیدیۆی بێ‌دەنگ هاوكات لەگەڵ دەنگی ئامۆژگارییەکە
-    function playMutedVideoWithAdvice() {
-      // ڕاگرتنی دەنگە کۆنەکان ئەگەر هەبن
-      window.speechSynthesis.cancel();
-
-      // بێ‌دەنگکردنی تەواوەتی دەنگی ڕەسەنی ڤیدیۆکە
-      ronaldoVideo.muted = true;
+    // لێدانی هاوکاتی دەنگ و ڤیدیۆکە
+    function playVideoWithRonaldoVoice() {
+      // ڕاگرتن و سەرلەنوێ دەستپێکردنەوەی دەنگ و ڤیدیۆ
+      ronaldoAudio.pause();
+      ronaldoAudio.currentTime = 0;
       ronaldoVideo.currentTime = 0;
 
-      // دروستکردنی دەنگی ئامۆژگارییەکە
-      const speech = new SpeechSynthesisUtterance(adviceText);
-      speech.lang = 'en-US';
-      speech.rate = 0.95; // خێرایی دەنگەکە
-      speech.pitch = 0.9;  // گۆڕینی تۆنی دەنگەکە
+      // لێدانی هەردووکیان پێکەوە
+      ronaldoAudio.play();
+      ronaldoVideo.play();
 
-      // کاتێک دەنگەکە دەست پێدەکات، ڤیدیۆکەش لێدەدرێت
-      speech.onstart = () => {
-        ronaldoVideo.play();
-      };
-
-      // کاتێک دەنگەکە تەواو دەبێت، ڤیدیۆکەش ڕادەوەستێت
-      speech.onend = () => {
+      // کاتێک دەنگەکە تەواو بوو، ڤیدیۆکەش بوەستێت
+      ronaldoAudio.onended = () => {
         ronaldoVideo.pause();
       };
-
-      // خوێندنەوەی دەنگەکە
-      window.speechSynthesis.speak(speech);
     }
 
-    // داگرتنی فایلی ڤیدیۆکە
+    // داگرتن
     function downloadVideo() {
       if (!videoFileUrl) return;
       const a = document.createElement('a');
       a.href = videoFileUrl;
-      a.download = `ronaldo-edited-${Date.now()}.mp4`;
+      a.download = `ronaldo-voice-edited-${Date.now()}.mp4`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
