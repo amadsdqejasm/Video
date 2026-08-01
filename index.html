@@ -1,600 +1,202 @@
-<!DOCTYPE html>
-<html lang="ckb" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تێلیگرام بووست پرۆ - Telegram Boost Pro</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts Kurdish (Vazirmatn) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Canvas Confetti CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    body {
-      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
-    }
-    .dir-ltr {
-      direction: ltr;
-      text-align: left;
-    }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #090d16; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
-  </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-sky-500 selection:text-white">
-
-  <!-- Background Light Blobs -->
-  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-sky-600/15 rounded-full blur-3xl"></div>
-    <div class="absolute top-1/3 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl"></div>
-  </div>
-
-  <!-- Header -->
-  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      
-      <!-- Brand -->
-      <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('home')">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center shadow-md shadow-sky-500/20">
-          <i data-lucide="send" class="w-5 h-5 text-white transform -rotate-12"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-sky-400 via-blue-200 to-indigo-300 bg-clip-text text-transparent">
-              تێلیگرام بووست پرۆ
-            </span>
-            <span class="bg-sky-500/20 text-sky-300 text-xs px-2 py-0.5 rounded-full font-medium border border-sky-500/30">
-              PRO v3.2
-            </span>
-          </div>
-          <p class="text-xs text-slate-400 hidden sm:block">
-            سیستەمی پیشەگەری زیادکردنی ڤیوو و ریاکشن
-          </p>
-        </div>
-      </div>
-
-      <!-- Nav -->
-      <nav class="hidden md:flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/60 text-xs font-semibold">
-        <button id="nav-home" onclick="showTab('home')" class="px-3.5 py-2 rounded-lg bg-sky-500 text-white shadow-md flex items-center gap-1.5 transition-all">
-          <i data-lucide="zap" class="w-4 h-4"></i>
-          سەرەکی
-        </button>
-        <button id="nav-history" onclick="showTab('history')" class="px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-1.5 transition-all">
-          <i data-lucide="history" class="w-4 h-4"></i>
-          مێژووی داواکارییەکان
-        </button>
-        <button id="nav-api" onclick="showTab('api')" class="px-3.5 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-1.5 transition-all">
-          <i data-lucide="code-2" class="w-4 h-4"></i>
-          بەستنەوە بە بۆت / API
-        </button>
-      </nav>
-
-      <!-- Status -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <div class="hidden lg:flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 px-2.5 py-1 rounded-lg text-xs font-mono">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <i data-lucide="server" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>سەرڤەر چالاکە</span>
-        </div>
-
-        <button onclick="showTab('home')" class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-lg shadow-sky-500/25 flex items-center gap-1.5 active:scale-95 transition-all">
-          <i data-lucide="zap" class="w-4 h-4 text-amber-300 fill-amber-300"></i>
-          <span>دەستپێکردن</span>
-        </button>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- Content Container -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 space-y-10">
+<!doctype html>
+<html lang="ckb" dir="rtl" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>داگرتنی ڤیدیۆی زێرین | TikTok & Instagram Downloader No Watermark</title>
+    <meta name="description" content="پلاتفۆرمی زێرین بۆ داگرتنی ڤیدیۆ و ستۆری تیک تۆک و ئینستاگرام بەبێ لوگۆ بە بەرزترین کوالێتی" />
     
-    <!-- TAB 1: HOME -->
-    <div id="tab-home-content" class="space-y-8">
-      
-      <!-- Hero -->
-      <div class="text-center max-w-3xl mx-auto space-y-4 pt-2">
-        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-sky-500/15 via-blue-500/15 to-indigo-500/15 border border-sky-500/30 px-4 py-1.5 rounded-full text-xs font-semibold text-sky-300 shadow-sm">
-          <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
-          <span>پڕۆگرامی فەرمی زیادکردنی ڵایک و بینەری تێلیگرام</span>
-        </div>
-
-        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-          زیادکردنی ڤیوو و ڵایکی پۆستی تێلیگرام بە بەرزترین خێرایی
-        </h1>
-
-        <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-          تەنها لینکی پۆستەکەت بنێرە و هەڵبژێرە: زۆرترین ڵایک، ڤیووی دەستبەجێ، و ریاکشنی جۆراوجۆر!
-        </p>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-        <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 backdrop-blur-md">
-          <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/30 shrink-0">
-            <i data-lucide="flame" class="w-5 h-5 fill-amber-400"></i>
-          </div>
-          <div>
-            <span class="text-xs text-slate-400 font-medium block">کۆی ڵایک و ڤیووی نێردراو</span>
-            <span class="text-base sm:text-lg font-extrabold text-white font-mono">١٤,٨٥٠,٠٠٠+</span>
-          </div>
-        </div>
-
-        <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 backdrop-blur-md">
-          <div class="w-10 h-10 rounded-xl bg-sky-500/20 flex items-center justify-center text-sky-400 border border-sky-500/30 shrink-0">
-            <i data-lucide="zap" class="w-5 h-5 fill-sky-400"></i>
-          </div>
-          <div>
-            <span class="text-xs text-slate-400 font-medium block">ناوەندی خێرایی</span>
-            <span class="text-base sm:text-lg font-extrabold text-white font-mono">&lt; 15 Secs</span>
-          </div>
-        </div>
-
-        <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 backdrop-blur-md">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30 shrink-0">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <span class="text-xs text-slate-400 font-medium block">ڕێژەی سەرکەوتن</span>
-            <span class="text-base sm:text-lg font-extrabold text-white font-mono">99.9%</span>
-          </div>
-        </div>
-
-        <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 backdrop-blur-md">
-          <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 border border-purple-500/30 shrink-0">
-            <i data-lucide="users" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <span class="text-xs text-slate-400 font-medium block">بەکارهێنەرانی چالاک</span>
-            <span class="text-base sm:text-lg font-extrabold text-white font-mono">2,480 Online</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Order Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
-        <!-- Form -->
-        <form onsubmit="handleStartBoost(event)" class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl backdrop-blur-md">
-          
-          <div class="border-b border-slate-800 pb-4">
-            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <i data-lucide="send" class="w-5 h-5 text-sky-400"></i>
-              داواکردنی بووست بۆ پۆستی تێلیگرام
-            </h3>
-            <p class="text-xs text-slate-400 mt-1">
-              تکایە لینکی پۆستەکەت بنێرە بۆ ئەوەی ڕاستەوخۆ دەست بە زیادکردنی ڵایک و ڤیوو بکەین
-            </p>
-          </div>
-
-          <!-- Telegram Post Link Input -->
-          <div class="space-y-2">
-            <label class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
-              <span>لینکی پۆستی تێلیگرام (Telegram Link)</span>
-              <span id="link-status-badge" class="text-emerald-400 text-[11px] font-normal flex items-center gap-1">
-                <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                لینکی ڕاست و دروستە
-              </span>
-            </label>
-
-            <input
-              type="text"
-              id="telegram-url-input"
-              value="https://t.me/duhok_news/4821"
-              oninput="handleUrlInputChange(this.value)"
-              placeholder="نموونە: https://t.me/channel_name/1234"
-              class="w-full bg-slate-950 border border-slate-700 px-4 py-3.5 rounded-2xl text-white text-sm font-mono focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dir-ltr"
-              required
-            />
-
-            <p class="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
-              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-sky-400 shrink-0"></i>
-              <span>دەتوانیت لە تێلیگرامدا کپی لە پۆستەکە بکەیت (Copy Post Link) و لێرە پەیستی بکەیت.</span>
-            </p>
-          </div>
-
-          <!-- Emoji Reaction Selector -->
-          <div class="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-            <div class="flex items-center justify-between">
-              <label class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-                ئیمۆجییەکانی ڵایک و ریاکشن هەڵبژێرە
-              </label>
-              <span id="selected-emoji-count" class="text-xs text-sky-400 font-mono font-medium">
-                4 هەڵبژێردراوە
-              </span>
-            </div>
-
-            <div class="flex flex-wrap gap-2 pt-1">
-              <button type="button" onclick="setEmojiPreset(['❤️', '👍', '🔥', '🚀'])" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
-                👍 گشتی (❤️ 👍 🔥 🚀)
-              </button>
-              <button type="button" onclick="setEmojiPreset(['🔥', '⚡', '💯'])" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
-                🔥 فایەر پێڕست (🔥 ⚡ 💯)
-              </button>
-              <button type="button" onclick="setEmojiPreset(['❤️', '😍'])" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
-                ❤️ تەنها ڵایک (❤️ 😍)
-              </button>
-            </div>
-
-            <div id="emoji-buttons-grid" class="grid grid-cols-6 gap-2 pt-2"></div>
-          </div>
-
-          <!-- Quantity -->
-          <div class="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
-            <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-              بڕی ڵایک / ڤیوو هەڵبژێرە
-            </label>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <button type="button" onclick="selectQuantity(1000)" class="py-2.5 px-3 rounded-xl font-mono text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">1,000</button>
-              <button type="button" onclick="selectQuantity(5000)" class="py-2.5 px-3 rounded-xl font-mono text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">5,000</button>
-              <button type="button" onclick="selectQuantity(10000)" class="py-2.5 px-3 rounded-xl font-mono text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">10,000</button>
-              <button type="button" onclick="selectQuantity(25000)" class="py-2.5 px-3 rounded-xl font-mono text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">25,000</button>
-            </div>
-
-            <button
-              type="button"
-              onclick="selectMaxBoost()"
-              class="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 border bg-gradient-to-r from-amber-500 to-rose-500 text-white border-amber-400 shadow-lg shadow-amber-500/20"
-            >
-              <i data-lucide="flame" class="w-4 h-4 text-amber-200 fill-amber-200"></i>
-              <span>🔥 زۆرترین بووست (Maximum Boost - 100K+)</span>
-            </button>
-          </div>
-
-          <!-- Submit -->
-          <button
-            type="submit"
-            class="w-full py-4 rounded-2xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-extrabold text-base sm:text-lg shadow-xl shadow-sky-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
-          >
-            <i data-lucide="sparkles" class="w-5 h-5 text-amber-300 fill-amber-300"></i>
-            <span>🚀 ڕاستەوخۆ بووست بکە (Start Boost)</span>
-          </button>
-
-        </form>
-
-        <!-- Preview Card -->
-        <div class="lg:col-span-5 space-y-4">
-          <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md">
-            <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <i data-lucide="gauge" class="w-4 h-4 text-sky-400"></i>
-              پێشبینیکردنی پۆستی تێلیگرام
-            </h3>
-
-            <div id="telegram-preview-box" class="w-full bg-[#17212b] border border-[#232e3c] rounded-2xl p-4 text-white shadow-2xl relative">
-              <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#232e3c]">
-                <div class="flex items-center gap-2">
-                  <div class="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 font-bold text-xs border border-sky-500/30">
-                    <i data-lucide="send" class="w-4 h-4 text-sky-400"></i>
-                  </div>
-                  <div>
-                    <div class="text-xs font-semibold text-sky-400">پیشاندانی راستەوخۆی پۆست</div>
-                    <p class="text-[10px] text-slate-400">Telegram Channel Message</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3 mb-2.5">
-                <div id="preview-avatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center font-bold text-white text-base shadow-md shrink-0">
-                  D
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span id="preview-channel-title" class="font-bold text-sm text-slate-100 truncate">duhok_news</span>
-                    <span class="w-4 h-4 rounded-full bg-sky-500 flex items-center justify-center text-slate-900 text-[10px]">✓</span>
-                  </div>
-                  <div id="preview-post-meta" class="text-[11px] text-slate-400 font-mono dir-ltr">
-                    @duhok_news • Post #4821
-                  </div>
-                </div>
-              </div>
-
-              <div class="bg-[#0e1621] p-3.5 rounded-xl text-slate-200 text-sm leading-relaxed mb-3 border border-[#1b2734]">
-                🔥 بەخێربێن بۆ کەناڵی فەرمی!
-ئەمە پۆستی تاقیکارییە بۆ زیادکردنی ڵایک و ڤیوو.
-تکایە ریاکشنی خۆتان لێبدەن!
-              </div>
-
-              <div class="space-y-2">
-                <div id="preview-reactions-list" class="flex flex-wrap items-center gap-1.5 min-h-[32px]"></div>
-
-                <div class="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-[#232e3c]/60 font-mono">
-                  <div class="flex items-center gap-1.5 text-slate-300 font-semibold bg-[#202b36] px-2.5 py-1 rounded-md border border-[#283645]">
-                    <i data-lucide="eye" class="w-3.5 h-3.5 text-sky-400"></i>
-                    <span id="preview-view-count" class="text-sky-300 font-mono text-xs font-bold">12,450</span>
-                    <span class="text-[10px] text-slate-400 font-sans">بینەر</span>
-                  </div>
-                  <span class="text-[11px] text-slate-400">ئەمڕۆ - 12:45</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-4 p-3 bg-slate-950 rounded-2xl border border-slate-800 text-xs text-slate-400 space-y-2 font-mono">
-              <div class="flex justify-between border-b border-slate-800 pb-1.5">
-                <span>ئامانجی پۆست:</span>
-                <span id="summary-post-id" class="text-sky-300 font-bold">#4821</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-800 pb-1.5">
-                <span>بڕی بووست:</span>
-                <span id="summary-boost-qty" class="text-amber-400 font-bold">100,000 (Max)</span>
-              </div>
-              <div class="flex justify-between">
-                <span>کاتی خەمڵێنراو:</span>
-                <span class="text-emerald-400 font-bold">&lt; 30 Çrke</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- TAB 2: HISTORY -->
-    <div id="tab-history-content" class="hidden bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-6 shadow-2xl backdrop-blur-md">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-          <i data-lucide="history" class="w-5 h-5 text-sky-400"></i>
-          مێژووی داواکارییەکانت
-        </h2>
-        <button onclick="clearHistory()" class="px-3 py-1.5 bg-slate-800 hover:bg-rose-950 text-rose-300 text-xs rounded-xl font-medium">
-          سڕینەوەی لۆگ
-        </button>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-right text-xs text-slate-300">
-          <thead class="bg-slate-950 text-slate-400 font-mono uppercase tracking-wider border-b border-slate-800">
-            <tr>
-              <th class="py-3 px-4 text-right">کۆد</th>
-              <th class="py-3 px-4 text-right">پۆست / کەناڵ</th>
-              <th class="py-3 px-4 text-right">بڕ</th>
-              <th class="py-3 px-4 text-right">بارودۆخ</th>
-            </tr>
-          </thead>
-          <tbody id="history-table-body" class="divide-y divide-slate-800/60 font-mono"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- TAB 3: API -->
-    <div id="tab-api-content" class="hidden bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-6 shadow-2xl backdrop-blur-md">
-      <div class="border-b border-slate-800 pb-4">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-          <i data-lucide="code-2" class="w-5 h-5 text-purple-400"></i>
-          بەستنەوە بە بۆت و SMM API
-        </h2>
-        <p class="text-xs text-slate-400 mt-1">
-          دەتوانیت ئەم سیستەمە بە بۆتی تێلیگرام یان ئینتەر فەیسی Python/Telethon خۆت ببه‌ستیتەوە.
-        </p>
-      </div>
-
-      <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden font-mono text-xs">
-        <div class="bg-slate-900 px-4 py-2.5 border-b border-slate-800 text-slate-300">
-          telegram_booster_script.py
-        </div>
-        <pre class="p-4 text-purple-200 overflow-x-auto dir-ltr"><code>import asyncio
-from telethon import TelegramClient
-
-api_id = 1234567
-api_hash = "YOUR_TELEGRAM_API_HASH"
-
-async function send_boost(post_url, reactions):
-    print("✅ Boost successfully dispatched to post!")
-
-asyncio.run(send_boost("https://t.me/duhok_news/4821", ["❤️", "👍", "🔥", "🚀"]))</code></pre>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- LIVE EXECUTION MODAL -->
-  <div id="execution-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden overflow-y-auto">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden text-white relative">
-      
-      <div class="bg-slate-950/80 p-4 px-6 border-b border-slate-800 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-3 h-3 rounded-full bg-sky-400 animate-ping"></div>
-          <div>
-            <h3 class="font-bold text-base sm:text-lg">خەریکی ناردنی ڵایک و ڤیووەکانین...</h3>
-            <p class="text-xs text-slate-400 font-mono">Order ID: #ORD12345</p>
-          </div>
-        </div>
-        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white">✕</button>
-      </div>
-
-      <div class="p-6 space-y-6">
-        <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
-          <div class="flex items-center justify-between text-sm font-semibold">
-            <span class="text-slate-400">کراوە / گەیشتوو:</span>
-            <span id="modal-qty-counter" class="text-sky-400 font-mono text-base font-bold">0 / 100,000 (0%)</span>
-          </div>
-
-          <div class="w-full bg-slate-800 h-4 rounded-full overflow-hidden p-0.5 border border-slate-700 relative">
-            <div id="modal-progress-bar" class="bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-400 h-full rounded-full transition-all duration-150" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden font-mono text-xs">
-          <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 text-slate-300">
-            لۆگی دەستبەجێی سەرڤەر (Live Logs)
-          </div>
-          <div id="modal-logs-console" class="p-3 h-32 overflow-y-auto space-y-1 text-[11px] text-sky-300 dir-ltr bg-black/60">
-            <div>[00:00:01] Connecting to Telegram SMM Proxy Node [Frankfurt-01]...</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-slate-950 p-4 border-t border-slate-800 flex justify-end">
-        <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs">
-          داخستن (Done)
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    const EMOJI_LIST = ['❤️', '👍', '🔥', '🎉', '🚀', '👏', '😍', '⚡', '🤯', '💯', '🙈', '🕊️'];
-    let selectedEmojis = ['❤️', '👍', '🔥', '🚀'];
-    let targetQuantity = 100000;
-    let reactionsCount = { '❤️': 450, '👍': 820, '🔥': 1200, '🚀': 310 };
-    let currentViews = 12450;
-    let boostInterval = null;
-
-    window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-      renderEmojiGrid();
-      updatePreview();
-    });
-
-    function showTab(tabName) {
-      document.getElementById('tab-home-content').classList.add('hidden');
-      document.getElementById('tab-history-content').classList.add('hidden');
-      document.getElementById('tab-api-content').classList.add('hidden');
-      document.getElementById('tab-' + tabName + '-content').classList.remove('hidden');
-    }
-
-    function renderEmojiGrid() {
-      const container = document.getElementById('emoji-buttons-grid');
-      container.innerHTML = '';
-      EMOJI_LIST.forEach(emoji => {
-        const isSelected = selectedEmojis.includes(emoji);
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.onclick = () => toggleEmoji(emoji);
-        btn.className = `h-12 rounded-xl text-2xl flex items-center justify-center transition-all ${
-          isSelected ? 'bg-gradient-to-b from-sky-500/20 to-blue-600/30 border-2 border-sky-400 text-white shadow-md' : 'bg-slate-800/80 hover:bg-slate-800 border border-slate-700 opacity-70'
-        }`;
-        btn.innerHTML = emoji;
-        container.appendChild(btn);
-      });
-      document.getElementById('selected-emoji-count').innerText = `${selectedEmojis.length} هەڵبژێردراوە`;
-      updatePreview();
-    }
-
-    function toggleEmoji(emoji) {
-      if (selectedEmojis.includes(emoji)) {
-        if (selectedEmojis.length > 1) selectedEmojis = selectedEmojis.filter(e => e !== emoji);
-      } else {
-        selectedEmojis.push(emoji);
-      }
-      renderEmojiGrid();
-    }
-
-    function setEmojiPreset(emojis) {
-      selectedEmojis = emojis;
-      renderEmojiGrid();
-    }
-
-    function selectQuantity(qty) {
-      targetQuantity = qty;
-      document.getElementById('summary-boost-qty').innerText = qty.toLocaleString();
-    }
-
-    function selectMaxBoost() {
-      targetQuantity = 100000;
-      document.getElementById('summary-boost-qty').innerText = '100,000 (Max)';
-    }
-
-    function handleUrlInputChange(val) {
-      const match = val.match(/(?:t\.me|telegram\.me)\/([a-zA-Z0-9_]+)\/(\d+)/);
-      if (match) {
-        document.getElementById('preview-channel-title').innerText = match[1];
-        document.getElementById('preview-post-meta').innerText = `@${match[1]} • Post #${match[2]}`;
-        document.getElementById('summary-post-id').innerText = `#${match[2]}`;
-        document.getElementById('preview-avatar').innerText = match[1].charAt(0).toUpperCase();
-      }
-    }
-
-    function updatePreview() {
-      const reactionsContainer = document.getElementById('preview-reactions-list');
-      reactionsContainer.innerHTML = '';
-      selectedEmojis.forEach(emoji => {
-        const count = reactionsCount[emoji] || Math.floor(Math.random() * 200) + 50;
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-200 border border-sky-400/50';
-        div.innerHTML = `<span>${emoji}</span> <span class="font-mono">${count.toLocaleString()}</span>`;
-        reactionsContainer.appendChild(div);
-      });
-      document.getElementById('preview-view-count').innerText = currentViews.toLocaleString();
-    }
-
-    function handleStartBoost(e) {
-      e.preventDefault();
-      document.getElementById('execution-modal').classList.remove('hidden');
-
-      let current = 0;
-      const progress = document.getElementById('modal-progress-bar');
-      const counter = document.getElementById('modal-qty-counter');
-      const logs = document.getElementById('modal-logs-console');
-
-      logs.innerHTML = '<div>[00:00:01] ⚡ High-Speed Proxy Threads Initiated...</div>';
-
-      clearInterval(boostInterval);
-      boostInterval = setInterval(() => {
-        current += Math.floor(targetQuantity / 30) + Math.floor(Math.random() * 50);
-        
-        if (current >= targetQuantity) {
-          current = targetQuantity;
-          clearInterval(boostInterval);
-          try { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } catch(err) {}
-          logs.innerHTML += '<div class="text-emerald-400">✅ Boost completed successfully! All likes & views delivered.</div>';
-          addHistoryRow(targetQuantity);
+    <!-- Google Kurdish Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800;900&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              gold: {
+                50: '#fffdf0',
+                100: '#fffab8',
+                300: '#ffd700',
+                500: '#d4af37',
+                700: '#b38728',
+                900: '#8a6d1c',
+              }
+            }
+          }
         }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Vazirmatn', 'Alexandria', sans-serif;
+        background-color: #0b0c10;
+        color: #e5e5e5;
+      }
+      .bg-gold-gradient {
+        background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+      }
+      .text-gold-gradient {
+        background: linear-gradient(135deg, #ffd700 0%, #f39c12 50%, #d4af37 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .border-gold-glow {
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+      }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #0f1016; }
+      ::-webkit-scrollbar-thumb { background: #2a2618; border-radius: 4px; border: 1px solid rgba(212, 175, 55, 0.3); }
+    </style>
 
-        const pct = Math.min(100, Math.round((current / targetQuantity) * 100));
-        progress.style.width = pct + '%';
-        counter.innerText = `${current.toLocaleString()} / ${targetQuantity.toLocaleString()} (${pct}%)`;
+    <!-- React 18 & Babel CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="bg-[#0b0c10] text-[#e5e5e5] antialiased min-h-screen">
+    <div id="root"></div>
 
-        currentViews += Math.floor(Math.random() * 20);
-        selectedEmojis.forEach(emoji => {
-          reactionsCount[emoji] = (reactionsCount[emoji] || 0) + Math.floor(Math.random() * 5);
-        });
-        updatePreview();
+    <script type="text/babel">
+      const { useState, useEffect } = React;
 
-      }, 100);
-    }
+      function App() {
+        const [url, setUrl] = useState('');
+        const [loading, setLoading] = useState(false);
+        const [result, setResult] = useState(null);
+        const [error, setError] = useState(null);
 
-    function closeModal() {
-      clearInterval(boostInterval);
-      document.getElementById('execution-modal').classList.add('hidden');
-    }
+        const handleDownload = async (e) => {
+          e.preventDefault();
+          if (!url.trim()) return;
+          setLoading(true);
+          setError(null);
+          setResult(null);
 
-    function addHistoryRow(qty) {
-      const tbody = document.getElementById('history-table-body');
-      const tr = document.createElement('tr');
-      tr.className = 'border-b border-slate-800/60';
-      tr.innerHTML = `
-        <td class="py-3 px-4 font-bold text-sky-400">#ORD-${Math.floor(Math.random()*8999+1000)}</td>
-        <td class="py-3 px-4">@duhok_news</td>
-        <td class="py-3 px-4 font-bold text-amber-300">${qty.toLocaleString()}</td>
-        <td class="py-3 px-4 text-emerald-400 font-semibold">تەواوبوو ✅</td>
-      `;
-      tbody.prepend(tr);
-    }
+          try {
+            const res = await fetch('/api/fetch-media', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url: url.trim() })
+            });
+            const data = await res.json();
+            if (data.success) {
+              setResult(data);
+            } else {
+              setError(data.error || 'کێشەیەک ڕوویدا لە داگرتنی زانیاری ڤیدیۆکە');
+            }
+          } catch (err) {
+            setError('نەتوانرا پەیوەندی بە سێرڤەرەوە بپەیوەسترێت');
+          } finally {
+            setLoading(false);
+          }
+        };
 
-    function clearHistory() {
-      document.getElementById('history-table-body').innerHTML = '';
-    }
-  </script>
-</body>
+        return (
+          <div className="min-h-screen flex flex-col justify-between p-4 sm:p-8">
+            {/* Header */}
+            <header className="max-w-6xl mx-auto w-full flex items-center justify-between pb-6 border-b border-[#d4af37]/20">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-[#d4af37]/20 border border-[#d4af37] flex items-center justify-center text-[#ffd700] text-2xl font-black">
+                  👑
+                </div>
+                <div>
+                  <h1 className="text-2xl font-black text-gold-gradient">داگرتنی ڤیدیۆی زێرین</h1>
+                  <p className="text-xs text-amber-200/70">تیک تۆک، ئینستاگرام و ستۆری بەبێ لوگۆ 100%</p>
+                </div>
+              </div>
+              <div className="px-4 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/40 text-[#ffd700] text-xs font-bold">
+                سیستەمی خێرا 2026
+              </div>
+            </header>
+
+            {/* Main Form Section */}
+            <main className="max-w-4xl mx-auto w-full my-10">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl sm:text-5xl font-black text-white mb-3">
+                  لینکەکەت دابنێ و <span className="text-gold-gradient">ڤیدیۆکەت بەبێ لوگۆ</span> دابگرە
+                </h2>
+                <p className="text-gray-400 text-sm">پشتگیری لە TikTok, Instagram, Stories, YouTube Shorts & Facebook</p>
+              </div>
+
+              {/* Input Card */}
+              <div className="p-1 rounded-3xl bg-gradient-to-r from-[#b38728] via-[#ffd700] to-[#aa771c] shadow-2xl">
+                <form onSubmit={handleDownload} className="bg-[#0e1017] rounded-[22px] p-4 sm:p-6 flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder="لینکی ڤیدیۆ یان ستۆری تیک تۆک / ئینستاگرام دابنێ..."
+                    className="flex-1 py-4 px-5 bg-[#161824] rounded-2xl border border-[#d4af37]/30 text-white placeholder-gray-400 font-medium text-sm outline-none text-right"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-8 py-4 rounded-2xl font-extrabold text-[#0b0c10] bg-gradient-to-r from-[#ffd700] to-[#d4af37] hover:brightness-110 active:scale-95 transition shadow-lg shadow-[#d4af37]/30"
+                  >
+                    {loading ? 'لە کاتی داگرتندا...' : 'داگرتنی ڤیدیۆ'}
+                  </button>
+                </form>
+              </div>
+
+              {error && (
+                <div className="mt-4 p-4 rounded-xl bg-red-950/80 border border-red-500/40 text-red-200 text-sm font-semibold text-center">
+                  {error}
+                </div>
+              )}
+
+              {/* Media Result */}
+              {result && (
+                <div className="mt-10 p-6 rounded-3xl bg-[#12141e] border border-[#d4af37]/30 shadow-2xl">
+                  <div className="flex flex-col md:flex-row gap-6 items-center">
+                    <div className="w-full md:w-1/3 aspect-[9/16] max-h-80 bg-black rounded-2xl overflow-hidden relative">
+                      <video src={result.downloadLinks[0]?.rawUrl || result.downloadLinks[0]?.url} controls className="w-full h-full object-contain" />
+                    </div>
+                    <div className="w-full md:w-2/3 text-right">
+                      <h3 className="text-xl font-black text-white mb-2">{result.title}</h3>
+                      <p className="text-xs text-emerald-400 font-bold mb-4">✨ ١٠٠٪ داگرتن بەبێ لوگۆ و وۆتەرمارک</p>
+
+                      <div className="space-y-3">
+                        {result.downloadLinks.map((link, idx) => (
+                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-[#181b29] border border-[#d4af37]/20">
+                            <div>
+                              <span className="font-bold text-white text-sm">{link.label}</span>
+                              <span className="text-xs text-gray-400 block">{link.quality} • {link.size}</span>
+                            </div>
+                            <a
+                              href={link.url}
+                              download
+                              className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#ffd700] to-[#d4af37] text-[#0b0c10] font-black text-xs"
+                            >
+                              داگرتن
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </main>
+
+            {/* Footer */}
+            <footer className="text-center text-xs text-gray-500 pt-8 border-t border-[#d4af37]/15">
+              © 2026 داگرتنی ڤیدیۆی زێرین. هەموو مافەکانی پارێزراوە.
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
 </html>
